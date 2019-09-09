@@ -26,6 +26,10 @@ func TestCasualSort(t *testing.T) {
 		[]string{"foo", "foo", "bar"},
 		[]string{"bar", "foo", "foo"},
 	)
+	s.Expect(
+		[]string{"truck", "man", "hi", "red", "BULL"},
+		[]string{"BULL", "hi", "man", "red", "truck"},
+	)
 }
 
 func TestReverseSort(t *testing.T) {
