@@ -1,18 +1,15 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
+	"io/ioutil"
 	"os"
+	"strings"
 )
 
 func readLines() ([]string, error) {
-	scanner := bufio.NewScanner(os.Stdin)
-	var lines []string
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-	return lines, scanner.Err()
+	allInput, err := ioutil.ReadAll(os.Stdin)
+	return strings.Split(string(allInput), "\n"), err
 }
 
 func outputLines(lines []string, outputFilePath string) error {
