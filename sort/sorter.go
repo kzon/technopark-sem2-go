@@ -44,9 +44,9 @@ func (s *Sorter) filterUnique() {
 	isUnique := make(map[string]bool, len(s.data))
 	var uniqueValues []string
 	for _, value := range s.data {
-		preparedValue := s.getUniqueValue(value)
-		if _, ok := isUnique[preparedValue]; !ok {
-			isUnique[preparedValue] = true
+		uniqueValue := s.getUniqueValue(value)
+		if _, ok := isUnique[uniqueValue]; !ok {
+			isUnique[uniqueValue] = true
 			uniqueValues = append(uniqueValues, value)
 		}
 	}
