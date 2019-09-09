@@ -23,10 +23,6 @@ func TestCasualSort(t *testing.T) {
 		[]string{"2", "3", "zero"},
 	)
 	s.Expect(
-		[]string{"foo", "FOO"},
-		[]string{"FOO", "foo"},
-	)
-	s.Expect(
 		[]string{"foo", "foo", "bar"},
 		[]string{"bar", "foo", "foo"},
 	)
@@ -41,10 +37,16 @@ func TestReverseSort(t *testing.T) {
 }
 
 func TestCaseInsensitiveSort(t *testing.T) {
-	s := sorterSuite{t, &SorterSettings{CaseInsensitive: true}}
-	s.Expect(
-		[]string{"foo", "FOO"},
-		[]string{"foo", "FOO"},
+	caseInsensitiveSuite := sorterSuite{t, &SorterSettings{CaseInsensitive: true}}
+	caseInsensitiveSuite.Expect(
+		[]string{"foo", "fOo", "FOO"},
+		[]string{"foo", "fOo", "FOO"},
+	)
+
+	caseSensitiveSuite := sorterSuite{t, &SorterSettings{CaseInsensitive: false}}
+	caseSensitiveSuite.Expect(
+		[]string{"foo", "fOo", "FOO"},
+		[]string{"FOO", "fOo", "foo"},
 	)
 }
 
