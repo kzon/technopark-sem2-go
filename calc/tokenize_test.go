@@ -14,7 +14,6 @@ func TestTokenize(t *testing.T) {
 	s.expect("0", []Token{{"0", TokenNumber}}, nil)
 	s.expect("9290", []Token{{"9290", TokenNumber}}, nil)
 	s.expect("  123 ", []Token{{"123", TokenNumber}}, nil)
-	//noinspection GoRedundantTypeDeclInCompositeLit
 	s.expect(
 		"80-90*6 + (1 - 0) * 8",
 		[]Token{
