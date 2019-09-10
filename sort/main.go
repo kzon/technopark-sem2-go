@@ -17,13 +17,13 @@ func main() {
 
 	lines, err := readLines()
 	if err != nil {
-		fmt.Println("Error reading input", err)
+		fmt.Println("Error reading input\n", err)
 		return
 	}
 	sortedLines := sortLines(lines)
 	err = outputLines(sortedLines, *flagOutputFile)
 	if err != nil {
-		fmt.Println("Error writing output", err)
+		fmt.Println("Error writing output\n", err)
 	}
 }
 

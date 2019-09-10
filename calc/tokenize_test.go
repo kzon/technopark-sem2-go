@@ -11,25 +11,26 @@ func TestTokenize(t *testing.T) {
 	s.expect("a", []Token{}, fmt.Errorf("invalid expression"))
 	s.expect("12\ndsa22", []Token{}, fmt.Errorf("invalid expression"))
 	s.expect("e12\ndsa22", []Token{}, fmt.Errorf("invalid expression"))
-	s.expect("0", []Token{Token{"0", TokenNumber}}, nil)
-	s.expect("9290", []Token{Token{"9290", TokenNumber}}, nil)
-	s.expect("  123 ", []Token{Token{"123", TokenNumber}}, nil)
+	s.expect("0", []Token{{"0", TokenNumber}}, nil)
+	s.expect("9290", []Token{{"9290", TokenNumber}}, nil)
+	s.expect("  123 ", []Token{{"123", TokenNumber}}, nil)
+	//noinspection GoRedundantTypeDeclInCompositeLit
 	s.expect(
 		"80-90*6 + (1 - 0) * 8",
 		[]Token{
-			Token{"80", TokenNumber},
-			Token{"-", TokenOperator},
-			Token{"90", TokenNumber},
-			Token{"*", TokenOperator},
-			Token{"6", TokenNumber},
-			Token{"+", TokenOperator},
-			Token{"(", TokenOpenParenthesis},
-			Token{"1", TokenNumber},
-			Token{"-", TokenOperator},
-			Token{"0", TokenNumber},
-			Token{")", TokenCloseParenthesis},
-			Token{"*", TokenOperator},
-			Token{"8", TokenNumber},
+			{"80", TokenNumber},
+			{"-", TokenOperator},
+			{"90", TokenNumber},
+			{"*", TokenOperator},
+			{"6", TokenNumber},
+			{"+", TokenOperator},
+			{"(", TokenOpenParenthesis},
+			{"1", TokenNumber},
+			{"-", TokenOperator},
+			{"0", TokenNumber},
+			{")", TokenCloseParenthesis},
+			{"*", TokenOperator},
+			{"8", TokenNumber},
 		},
 		nil,
 	)
