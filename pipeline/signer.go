@@ -6,28 +6,19 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"sync/atomic"
-	"time"
 )
 
 func ExecutePipeline(jobs ...job) {
 	wg := &sync.WaitGroup{}
 
-	var in, out1, out2 chan interface{}
-	in = make(chan interface{}, MaxInputDataLen)
+	in := make(chan interface{})
+	var out chan interface{}
 
-	for i := 0; i < len(jobs); i += 2 {
-		out1 = make(chan interface{}, MaxInputDataLen)
-		out2 = make(chan interface{}, MaxInputDataLen)
-
+	for _, job := range jobs {
+		out = make(chan interface{})
 		wg.Add(1)
-		go runJob(jobs[i], in, out1, wg)
-		if i+1 < len(jobs) {
-			wg.Add(1)
-			go runJob(jobs[i+1], out1, out2, wg)
-		}
-
-		in = out2
+		go runJob(job, in, out, wg)
+		in = out
 	}
 
 	wg.Wait()
@@ -41,6 +32,7 @@ func runJob(j job, in, out chan interface{}, wg *sync.WaitGroup) {
 
 func SingleHash(in, out chan interface{}) {
 	outerWg := &sync.WaitGroup{}
+	dataSignerMd5Mutex := &sync.Mutex{}
 	for data := range in {
 		fmt.Println("[SingleHash] recieved", data)
 		outerWg.Add(1)
@@ -56,14 +48,10 @@ func SingleHash(in, out chan interface{}) {
 			}()
 			go func() {
 				defer innerWg.Done()
-				for {
-					if flag := atomic.LoadUint32(&dataSignerOverheat); flag == 1 {
-						time.Sleep(time.Millisecond * 100)
-					} else {
-						break
-					}
-				}
-				result2 = DataSignerCrc32(DataSignerMd5(convertedData))
+				dataSignerMd5Mutex.Lock()
+				md5 := DataSignerMd5(convertedData)
+				dataSignerMd5Mutex.Unlock()
+				result2 = DataSignerCrc32(md5)
 			}()
 			innerWg.Wait()
 			fmt.Println("[SingleHash] result", result1+"~"+result2)
